@@ -9,6 +9,9 @@
 -create the connection and route the packets
 -navigate to the datalab notebook in the browser
 
+instructions inspired by
+https://cloud.google.com/blog/big-data/2017/02/google-cloud-platform-for-data-scientists-using-jupyter-notebooks-with-apache-spark-on-google-cloud
+
 ############################################################################################### 
 #
 #  prerequisites to install on windows
