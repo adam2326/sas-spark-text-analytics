@@ -1,0 +1,107 @@
+############################################################################################### 
+#
+#  STEPS OVERVIEW
+#
+############################################################################################### 
+-ensure prereqs are installed
+-create the cluster
+--use initialization action script for datalab
+-create the connection and route the packets
+-navigate to the datalab notebook in the browser
+
+############################################################################################### 
+#
+#  prerequisites to install on windows
+#
+############################################################################################### 
+putty
+google cloud SDK
+
+
+############################################################################################### 
+#
+#  CREATE THE CLUSTER
+#
+############################################################################################### 
+# follow these steps - keep the name of your cluster and the zone in which you created the cluster
+DOCS: https://cloud.google.com/dataproc/docs/quickstarts/quickstart-console#create_a_cluster
+
+*** use the initialization script to install datalab on the cluster
+DOCS: https://cloud.google.com/dataproc/docs/concepts/init-actions#using_initialization_actions
+enter the following into the initialization actions section: gs://dataproc-initialization-actions/datalab/datalab.sh
+
+
+
+############################################################################################### 
+#
+#  CREATE THE CONNECTION AND ROUTE THE INFORMATION
+#
+############################################################################################### 
+
+*** If you have already done the setup, make sure to start up the compute nodes before running the following commands
+# relevant docs: https://cloud.google.com/dataproc/docs/concepts/cluster-web-interfaces
+
+# Create an SSH tunnel - run this from the google SDK command line
+$ gcloud compute ssh --zone=<cluster-zone> --ssh-flag="-D" --ssh-flag="10000" --ssh-flag="-N" --ssh-flag="-n" "<cluster-name>-m"
+NOTE: the --ssh-flag="-n" in the above might through an error.  If so just remove and run again.
+# example
+$ gcloud compute ssh --zone=us-east4-b --ssh-flag="-D 1080" --ssh-flag="-N" "spark-ta-m"
+
+# Configure your browser - run this from the windows command line 
+$ cd C:\Program Files (x86)\Google\Chrome\Application
+$ chrome.exe --proxy-server="socks5://localhost:1080" --host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost" --user-data-dir=/tmp/                                                                                           
+
+# confirm setup is working by accessing the YARN UI - navigate to the following URL in the browser that just popped open
+http://<master-host-name>:8088
+example: http://spark-ta-m:8088
+
+############################################################################################### 
+#
+#  CONNECT TO THE DATALAB NOTEBOOK IN THE BROWSER THAT WAS OPENED
+#
+############################################################################################### 
+# Once you have the tunnel running, connect to the external IP of the notebook and port. The default port is 8123.
+
+http://<master-host-name>:8123
+example: http://spark-ta-m:8123
+
+relevant docs: https://cloud.google.com/blog/big-data/2017/02/google-cloud-platform-for-data-scientists-using-jupyter-notebooks-with-apache-spark-on-google-cloud
+
+
+############################################################################################### 
+#
+#  ADDING PYTHON LIBRARIES TO DATAPROC INSTANCE
+#
+###############################################################################################
+
+# Add a code cell in a notebook to pip install the library, and then run the code cell after substituting lib-name
+!pip install lib-name
+
+examples:
+!pip install --upgrade pandas
+!pip install --upgrade google-api-python-client
+!pip install --upgrade seaborn
+
+relevant docs:
+https://cloud.google.com/datalab/docs/how-to/adding-libraries
+
+
+
+############################################################################################### 
+#
+#  DOCUMENTATION
+#
+############################################################################################### 
+
+# Initialization actions
+https://cloud.google.com/dataproc/docs/concepts/init-actions
+https://github.com/GoogleCloudPlatform/dataproc-initialization-actions
+
+# Cluster web interfaces 
+https://cloud.google.com/dataproc/docs/concepts/cluster-web-interfaces
+
+# Google Cloud Datalab samples and documentation
+https://github.com/googledatalab/notebooks
+
+# Adding Python libraries to a Cloud Datalab instance - assuming there is no difference given that this is actually a dataproc instance
+https://cloud.google.com/datalab/docs/how-to/adding-libraries
