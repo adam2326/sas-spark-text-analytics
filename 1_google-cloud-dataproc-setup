@@ -108,3 +108,22 @@ https://github.com/googledatalab/notebooks
 
 # Adding Python libraries to a Cloud Datalab instance - assuming there is no difference given that this is actually a dataproc instance
 https://cloud.google.com/datalab/docs/how-to/adding-libraries
+
+
+DATALAB DOCS: http://googledatalab.github.io/pydatalab/datalab.storage.html
+DATALAB NOTEBOOKS: https://github.com/googledatalab/notebooks
+
+
+
+always name spark cluster "spark-ta"
+
+gcloud compute ssh --zone=us-east4-b --ssh-flag="-D 1080" --ssh-flag="-N" "spark-ta-m"
+
+cd C:\Program Files (x86)\Google\Chrome\Application
+chrome.exe --proxy-server="socks5://localhost:1080" --host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost" --user-data-dir=/tmp/
+
+
+http://spark-ta-m:8088/
+http://spark-ta-m:8123/
+
+http://spark-ta-m:8080/tree/datalab
